@@ -1,0 +1,26 @@
+name: Daily DevSync Commit
+
+on:
+  schedule:
+    - cron: '17 3 * * *'   # runs daily at 03:17 UTC
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 22f3000405@ds.study.iitm.ac.in update file
+        run: |
+          echo "Last update: $(date)" >> daily_log.txt
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "DevSync Bot"
+          git config --global user.email "22f3000405@ds.study.iitm.ac.in"
+          git add .
+          git commit -m "Automated daily update" || echo "No changes to commit"
+          git push
